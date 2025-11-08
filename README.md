@@ -20,7 +20,7 @@ https://www.notion.so/korsak0v/Data-Engineer-185c62fdf79345eb9da9928356884ea0
 
 Хорошие тесты – уверенность в качестве данных и стабильной работе всей дата-инфраструктуры.
 
-
+<html>
 <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
   <!-- Определение градиентов -->
   <defs>
@@ -124,6 +124,7 @@ https://www.notion.so/korsak0v/Data-Engineer-185c62fdf79345eb9da9928356884ea0
     </text>
   </g>
 </svg>
+</html>
 
 ### Виртуальное окружение
 
