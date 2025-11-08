@@ -1,11 +1,18 @@
 import pendulum
 import requests
+
 from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.operators.python import PythonOperator
-from airflow.hooks.postgres_hook import PostgresHook
+
 
 OWNER = "i.korsakov"
-DAG_ID = "bad_users_to_pg"
+DAG_ID = "bad_etl_pattern_for_testing_users_to_pg"
+SHORT_DESCRIPTION = "Антипаттерн: все этапы ETL в одной функции"
+LONG_DESCRIPTION = """
+# LONG DESCRIPTION
+"""
 
 PG_CONN_ID = "dwh"
 PG_SCHEMA = "public"
@@ -19,6 +26,7 @@ args = {
     "retry_delay": pendulum.duration(minutes=15),
     "depends_on_past": False,
 }
+
 
 def etl_load_user_to_pg():
     # 1. Получаем данные по API
@@ -39,20 +47,34 @@ def etl_load_user_to_pg():
     pg_hook = PostgresHook(postgres_conn_id=PG_CONN_ID)
     insert_sql = f"""
         INSERT INTO {PG_SCHEMA}.{PG_TABLE} (first_name, last_name, email, city, country)
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES ('{first_name}', '{last_name}', '{email}', '{city}', '{country}');
     """
-    pg_hook.run(insert_sql, parameters=(first_name, last_name, email, city, country))
+    pg_hook.run(
+        sql=insert_sql,
+        parameters={"first_name": first_name, "last_name": last_name, "email": email, "city": city, "country": country},
+    )
+
 
 with DAG(
     dag_id=DAG_ID,
-    schedule=None,
+    schedule_interval="0 10 * * *",
     default_args=args,
     tags=["etl", "bad_example", "postgres"],
-    description="Антипаттерн: все этапы ETL в одной функции",
     catchup=False,
+    description=SHORT_DESCRIPTION,
+    concurrency=1,
+    max_active_tasks=1,
+    max_active_runs=1,
 ) as dag:
+    dag.doc_md = LONG_DESCRIPTION
+
+    start = EmptyOperator(task_id="start")
 
     etl_task = PythonOperator(
         task_id="etl_load_user_to_pg",
         python_callable=etl_load_user_to_pg,
     )
+
+    end = EmptyOperator(task_id="end")
+
+    start >> etl_task >> end
