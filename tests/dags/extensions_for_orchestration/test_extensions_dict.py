@@ -1,7 +1,8 @@
-from dags.extensions_for_orchestration.extensions_dict import (
+from extensions_for_orchestration.extensions_dict import (
     dict_keys_in_str,
     dict_keys_in_placeholder,
 )
+
 
 class TestDictKeysInStr:
     def test_empty_dict(self):
@@ -33,4 +34,3 @@ class TestDictKeysInPlaceholder:
     def test_multiple_keys(self):
         d = {"name": "Ivan", "age": 30, "city": "Tomsk"}
         assert dict_keys_in_placeholder(d) == "%(name)s, %(age)s, %(city)s"
-
