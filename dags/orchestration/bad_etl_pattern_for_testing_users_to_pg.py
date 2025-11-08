@@ -46,8 +46,9 @@ def etl_load_user_to_pg():
     # 3. Подключаемся к БД и пишем данные
     pg_hook = PostgresHook(postgres_conn_id=PG_CONN_ID)
     insert_sql = f"""
-        INSERT INTO {PG_SCHEMA}.{PG_TABLE} (first_name, last_name, email, city, country)
-        VALUES ('{first_name}', '{last_name}', '{email}', '{city}', '{country}');
+        INSERT INTO {PG_SCHEMA}.{PG_TABLE} 
+            (first_name, last_name, email, city, country)
+        VALUES (%(first_name)s, %(last_name)s, %(email)s, %(city)s, %(country)s);
     """
     pg_hook.run(
         sql=insert_sql,
