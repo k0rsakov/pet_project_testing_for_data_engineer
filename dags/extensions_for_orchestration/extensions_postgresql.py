@@ -5,6 +5,7 @@ import airflow.models.connection
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from extensions_for_orchestration.extensions_dict import dict_keys_in_placeholder
 from extensions_for_orchestration.extensions_dict import dict_keys_in_str
+from extensions_for_orchestration.extensions_str import generate_insert_into_for_row
 
 
 def save_dict_to_postgres(
@@ -30,8 +31,7 @@ def save_dict_to_postgres(
 
     columns = dict_keys_in_str(source_dict=dict_row)
     placeholders = dict_keys_in_placeholder(source_dict=dict_row)
-    insert_sql = f"INSERT INTO {schema}.{table} ({columns}) VALUES ({placeholders})"
-    print(insert_sql)
+    insert_sql = generate_insert_into_for_row(schema=schema, table=table, columns=columns, placeholders=placeholders)
 
     pg_hook.run(sql=insert_sql, parameters=dict_row, autocommit=True)
 
