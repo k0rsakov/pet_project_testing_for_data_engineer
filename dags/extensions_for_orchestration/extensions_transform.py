@@ -1,15 +1,14 @@
-from typing import Any, Dict
+from typing import Any, Sequence
 
 
-def extract_user_fields(api_response: Dict[str, Any]) -> Dict[str, str]:
+def extract_nested_fields(user_data: dict | None = None) -> dict[str, Any]:
     """
-    Извлекает нужные пользовательские данные из полной структуры API randomuser.me.
+    Пример сложной логики для randomuser.me (можно расширять):
 
-    :param api_response: Ответ (dict), полученный из API
-    :return: Словарь с user-полями: first_name, last_name, email, city, country
-    :raises KeyError: если структура отличается от ожидаемой
+    :param user_data: Апи-ответ для одного пользователя (user_data['results'][0])
+    :return: Словарь нормализованных user-данных
     """
-    user = api_response["results"][0]
+    user = user_data["results"][0]
     return {
         "first_name": user["name"]["first"],
         "last_name": user["name"]["last"],
