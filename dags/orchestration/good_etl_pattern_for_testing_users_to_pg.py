@@ -1,12 +1,11 @@
 import pendulum
-
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
 from extensions_for_orchestration.extensions_api import get_api_response
-from extensions_for_orchestration.extensions_transform import extract_user_fields
-from extensions_for_orchestration.extensions_postgresql import save_user_to_pg
+from extensions_for_orchestration.extensions_transform import extract_nested_fields
+from extensions_for_orchestration.extensions_postgresql import save_dict_to_postgres
 
 OWNER = "i.korsakov"
 DAG_ID = "good_etl_pattern_for_testing_users_to_pg"
@@ -32,12 +31,13 @@ args = {
 
 
 def etl_user_to_pg_task():
-    """
-    Задача загрузки произвольного пользователя из randomuser.me в PostgreSQL.
-    """
-    api_data = get_api_response()
-    user = extract_user_fields(api_data)
-    save_user_to_pg(user, PG_CONN_ID, PG_SCHEMA, PG_TABLE)
+    # Можно подать URL и параметры через переменные/конфиг для унификации (пример с randomuser.me)
+    api_data = get_api_response(
+        url="https://randomuser.me/api/",
+        timeout=600,
+    )
+    user_row = extract_nested_fields(api_data)
+    save_dict_to_postgres(conn_id=PG_CONN_ID, schema=PG_SCHEMA, table=PG_TABLE, dict_row=user_row)
 
 
 with DAG(
