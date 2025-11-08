@@ -16,6 +16,7 @@ def save_dict_to_postgres(
 ) -> None:
     """
     Универсальная функция для вставки одной строки в любую таблицу (Postgres).
+
     :param conn_id: Название соединения Airflow
     :param schema: Схема Postgres
     :param table: Имя таблицы
