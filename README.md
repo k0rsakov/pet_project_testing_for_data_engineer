@@ -25,7 +25,7 @@ https://www.notion.so/korsak0v/Data-Engineer-185c62fdf79345eb9da9928356884ea0
 Настройка виртуального окружения:
 
 ```bash
-python3.13 -m venv venv && \
+python3.12 -m venv venv && \
 source venv/bin/activate && \
 pip install --upgrade pip && \
 pip install poetry && \
