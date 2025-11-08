@@ -1,8 +1,10 @@
 from typing import Any
-from airflow.models.connection import Connection
+
 import airflow.models.connection
+
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from extensions_for_orchestration.extensions_dict import dict_keys_in_str, dict_keys_in_placeholder
+from extensions_for_orchestration.extensions_dict import dict_keys_in_placeholder
+from extensions_for_orchestration.extensions_dict import dict_keys_in_str
 
 
 def save_dict_to_postgres(

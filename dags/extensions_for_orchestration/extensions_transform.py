@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Any
 
 
 def extract_nested_fields(user_data: dict | None = None) -> dict[str, Any]:
