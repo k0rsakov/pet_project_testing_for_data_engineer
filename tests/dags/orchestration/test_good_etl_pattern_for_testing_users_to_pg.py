@@ -7,30 +7,30 @@ class TestGoodEtlPatternDAG:
     DAG_ID = "good_etl_pattern_for_testing_users_to_pg"
 
     @pytest.fixture(scope="class")
-    def t_dag(self):
+    def dag_fixture(self):
         bag = DagBag(dag_folder="dags/orchestration", include_examples=False)
         dag = bag.get_dag(self.DAG_ID)
         assert dag is not None, f"DAG {self.DAG_ID} не найден"
         assert bag.import_errors == {}
         return dag
 
-    def test_dag_loaded(self, t_dag):
-        assert t_dag.dag_id == self.DAG_ID
+    def test_dag_loaded(self, dag_fixture):
+        assert dag_fixture.dag_id == self.DAG_ID
 
-    def test_task_count(self, t_dag):
-        assert len(t_dag.tasks) == 3
+    def test_task_count(self, dag_fixture):
+        assert len(dag_fixture.tasks) == 3
 
-    def test_task_ids(self, t_dag):
-        assert set(t_dag.task_ids) == {"start", "etl_load_user_to_pg", "end"}
+    def test_task_ids(self, dag_fixture):
+        assert set(dag_fixture.task_ids) == {"start", "etl_load_user_to_pg", "end"}
 
-    def test_etl_task_type(self, t_dag):
-        task = t_dag.get_task("etl_load_user_to_pg")
+    def test_etl_task_type(self, dag_fixture):
+        task = dag_fixture.get_task("etl_load_user_to_pg")
         assert isinstance(task, PythonOperator)
 
-    def test_dependencies(self, t_dag):
-        start = t_dag.get_task("start")
-        etl = t_dag.get_task("etl_load_user_to_pg")
-        end = t_dag.get_task("end")
+    def test_dependencies(self, dag_fixture):
+        start = dag_fixture.get_task("start")
+        etl = dag_fixture.get_task("etl_load_user_to_pg")
+        end = dag_fixture.get_task("end")
         # Проверяем направленную цепочку
         assert etl in start.downstream_list
         assert end in etl.downstream_list
@@ -38,5 +38,5 @@ class TestGoodEtlPatternDAG:
         assert etl in end.upstream_list
 
     @pytest.mark.parametrize("task_id", ["start", "etl_load_user_to_pg", "end"])
-    def test_task_exists(self, t_dag, task_id):
-        assert t_dag.has_task(task_id)
+    def test_task_exists(self, dag_fixture, task_id):
+        assert dag_fixture.has_task(task_id)
