@@ -20,6 +20,7 @@ PG_TABLE = "users"
 
 args = {
     "owner": OWNER,
+    # "start_date": pendulum.datetime(year=20240, month=1, day=1, tz="Europe/Moscow"),
     "start_date": pendulum.datetime(year=2024, month=1, day=1, tz="Europe/Moscow"),
     "catchup": False,
     "retries": 1,
