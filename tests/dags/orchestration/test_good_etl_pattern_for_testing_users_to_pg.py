@@ -2,6 +2,7 @@ import pytest
 from airflow.models import DagBag
 from airflow.operators.python import PythonOperator
 
+
 class TestGoodEtlPatternDAG:
     DAG_ID = "good_etl_pattern_for_testing_users_to_pg"
 
