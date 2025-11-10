@@ -1,3 +1,4 @@
+import pytest
 from extensions_for_orchestration.extensions_dict import (
     dict_keys_in_str,
     dict_keys_in_placeholder,
@@ -7,7 +8,7 @@ from extensions_for_orchestration.extensions_dict import (
 class TestDictKeysInStr:
     def test_empty_dict(self):
         assert dict_keys_in_str({}) == ""
-
+    @pytest.mark.unit
     def test_none(self):
         assert dict_keys_in_str(None) == ""
 
