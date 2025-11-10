@@ -35,33 +35,3 @@ def save_dict_to_postgres(
     insert_sql = generate_insert_into_for_row(schema=schema, table=table, columns=columns, placeholders=placeholders)
 
     pg_hook.run(sql=insert_sql, parameters=dict_row, autocommit=True)
-
-
-# conn_params = {
-#     "host": "localhost",
-#     "schema": "postgres",
-#     "login": "postgres",
-#     "password": "postgres",
-#     "port": 5433,
-# }
-
-# Создание объекта подключения вручную
-# conn = Connection(
-#     conn_type="postgres",
-#     host=conn_params["host"],
-#     schema=conn_params["schema"],
-#     login=conn_params["login"],
-#     password=conn_params["password"],
-#     port=conn_params["port"],
-# )
-
-# print(type(conn))
-#
-# if isinstance(conn, airflow.models.connection.Connection):
-#     print("yes")
-# else:
-#     print('not yes')
-
-# save_dict_to_postgres(
-#     conn_id=conn, table="users", row={"first_name": "Ivan", "last_name": "Ivanov", "email": "foo@example.com"}
-# )

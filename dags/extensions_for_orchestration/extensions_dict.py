@@ -22,19 +22,3 @@ def dict_keys_in_placeholder(source_dict: dict[str, Any] | None = None) -> str:
     if source_dict is None:
         return ""
     return ", ".join([f"%({k})s" for k in source_dict.keys()])
-
-
-# s = dict_keys_in_str(
-#     {
-#         'first_name': "Ivan",
-#         "last_name": "Ivanov",
-#         "email": 'foo@example.com'
-#     }
-# )
-#
-# print(
-#     f"""
-#     INSERT INTO ({s})
-#     VALUES()
-#     """
-# )
