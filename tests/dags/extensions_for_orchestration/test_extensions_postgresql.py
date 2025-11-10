@@ -1,6 +1,5 @@
-import pandas as pd
-import pytest
-from unittest.mock import patch, MagicMock
+import logging
+
 from airflow.models.connection import Connection
 from extensions_for_orchestration.extensions_postgresql import save_dict_to_postgres
 from handles.oltp.execute_custom_query import execute_custom_query_postgres
@@ -8,7 +7,8 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
 class TestSaveDictToPostgres:
-    def create_test_users(self):
+    @staticmethod
+    def create_test_users():
         execute_custom_query_postgres(
             port=5434,
             query="""
@@ -26,7 +26,8 @@ class TestSaveDictToPostgres:
                 """,
         )
 
-    def create_pg_conn(self):
+    @staticmethod
+    def create_pg_conn():
         return Connection(
             conn_type="postgres", host="localhost", schema="postgres", login="postgres", password="postgres", port=5434
         )
@@ -47,8 +48,11 @@ class TestSaveDictToPostgres:
         )
         pg_hook = PostgresHook(postgres_conn_id=None, connection=conn)
 
-        df = pg_hook.get_records(
+        list_ = pg_hook.get_records(
             sql="select * from users",
         )
 
-        print(df)
+        logging.info(*list_)
+
+        # assert len(list_) == 1
+        assert len(list_) == 2
