@@ -30,7 +30,7 @@ args = {
 }
 
 
-def etl_user_to_pg_task():
+def etl_load_user_to_pg():
     # Можно подать URL и параметры через переменные/конфиг для унификации (пример с randomuser.me)
     api_data = get_api_response(
         url="https://randomuser.me/api/",
@@ -54,10 +54,12 @@ with DAG(
     dag.doc_md = LONG_DESCRIPTION
 
     start = EmptyOperator(task_id="start")
+
     etl_task = PythonOperator(
-        task_id="etl_user_to_pg_task",
-        python_callable=etl_user_to_pg_task,
+        task_id="etl_load_user_to_pg",
+        python_callable=etl_load_user_to_pg,
     )
+
     end = EmptyOperator(task_id="end")
 
     start >> etl_task >> end
